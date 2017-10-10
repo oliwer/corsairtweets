@@ -18,14 +18,12 @@ var (
 	channel   = flag.String("channel", "#Corsair", "Channel to join")
 	appkey    = os.Getenv("TWITTER_APP_KEY")
 	appsecret = os.Getenv("TWITTER_APP_SECRET")
-	token     = os.Getenv("TWITTER_TOKEN")
-	toksecret = os.Getenv("TWITTER_TOKEN_SECRET")
 )
 
 func main() {
 	flag.Parse()
 
 	b := bot.NewBot(*host, *ssl, *nick, *ident, []string{*channel})
-	twitter.Register(b, appkey, appsecret, token, toksecret)
+	twitter.Register(b, appkey, appsecret)
 	b.Run()
 }
