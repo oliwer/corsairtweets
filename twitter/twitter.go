@@ -7,19 +7,18 @@ import (
 	"os"
 	"strings"
 
-	// rm -rf anaconda/vendor/github.com/garyburd/oauth to fix compilation
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/StalkR/goircbot/bot"
 	"github.com/garyburd/go-oauth/oauth"
 )
 
 const (
-	TokenFilename = "access-token.dat"
-	Sep = " "
+	tokenFilename = "access-token.dat"
+	sep           = " "
 )
 
 var (
-	api *anaconda.TwitterApi
+	api      *anaconda.TwitterApi
 	tmpCreds *oauth.Credentials
 )
 
@@ -46,16 +45,16 @@ func tweet(e *bot.Event) {
 
 // Request a login URL
 func login(e *bot.Event) {
-	url, creds, err := anaconda.AuthorizationURL("oob")
+	url, creds, err := api.AuthorizationURL("oob")
 	if err != nil {
 		e.Bot.Privmsg(e.Target, fmt.Sprintf(
 			"failed to get Twitter authorization URL: %v", err))
 		return
 	}
 
-	e.Bot.Privmsg(e.Target, "Please open this URL: " + url)
-	e.Bot.Privmsg(e.Target, "After allowing the application to access your " +
-		"account, Twitter will give you a PIN code. You must pass this " +
+	e.Bot.Privmsg(e.Target, "Please open this URL: "+url)
+	e.Bot.Privmsg(e.Target, "After allowing the application to access your "+
+		"account, Twitter will give you a PIN code. You must pass this "+
 		"PIN to the bot with the following command:")
 	e.Bot.Privmsg(e.Target, "> twpin [pincode]")
 
@@ -66,7 +65,7 @@ func login(e *bot.Event) {
 func pin(e *bot.Event) {
 	pin := strings.Trim(e.Args, " ")
 
-	cred, _, err := anaconda.GetCredentials(tmpCreds, pin)
+	cred, _, err := api.GetCredentials(tmpCreds, pin)
 	if err != nil {
 		e.Bot.Privmsg(e.Target, fmt.Sprintf("invalid pin code: %s", err))
 		return
@@ -79,23 +78,23 @@ func pin(e *bot.Event) {
 
 // Load the token from filesystem
 func loadAccessToken() (token, toksecret string) {
-	bytes, err := ioutil.ReadFile(TokenFilename)
+	bytes, err := ioutil.ReadFile(tokenFilename)
 	if err != nil {
-		if ! os.IsNotExist(err) {
+		if !os.IsNotExist(err) {
 			log.Println("failed to load Twitter Access Token:", err)
 		}
 		return "", ""
 	}
 
-	list := strings.Split(string(bytes), Sep)
+	list := strings.Split(string(bytes), sep)
 	return list[0], list[1]
 }
 
 // Save the token to a file
 func saveAccessToken(token, toksecret string) {
-	content := strings.Join([]string{token,toksecret}, Sep)
+	content := strings.Join([]string{token, toksecret}, sep)
 
-	err := ioutil.WriteFile(TokenFilename, []byte(content), 0600)
+	err := ioutil.WriteFile(tokenFilename, []byte(content), 0600)
 	if err != nil {
 		log.Println("failed to save access token:", err)
 	}
