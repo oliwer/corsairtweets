@@ -1,6 +1,7 @@
 package twitter
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -71,6 +72,8 @@ func pin(e *bot.Event) {
 		return
 	}
 
+	e.Bot.Privmsg(e.Target, "Pin code is valid. Login complete!")
+
 	api = anaconda.NewTwitterApi(cred.Token, cred.Secret)
 	tmpCreds = nil
 	saveAccessToken(cred.Token, cred.Secret)
@@ -78,7 +81,7 @@ func pin(e *bot.Event) {
 
 // Load the token from filesystem
 func loadAccessToken() (token, toksecret string) {
-	bytes, err := ioutil.ReadFile(tokenFilename)
+	tokens, err := ioutil.ReadFile(tokenFilename)
 	if err != nil {
 		if !os.IsNotExist(err) {
 			log.Println("failed to load Twitter Access Token:", err)
@@ -86,7 +89,9 @@ func loadAccessToken() (token, toksecret string) {
 		return "", ""
 	}
 
-	list := strings.Split(string(bytes), sep)
+	tokens = bytes.TrimSpace(tokens)
+
+	list := strings.Split(string(tokens), sep)
 	return list[0], list[1]
 }
 
@@ -109,7 +114,7 @@ func Register(b bot.Bot, appkey, appsecret string) {
 	api = anaconda.NewTwitterApi(token, toksecret)
 
 	b.Commands().Add("tweet", bot.Command{
-		Help:    "Send a message on the #CorsairIRC Tweeter feed",
+		Help:    "Post a tweet on @CorsairIRC (for real)",
 		Handler: tweet,
 		Pub:     true,
 		Priv:    true,
@@ -118,21 +123,21 @@ func Register(b bot.Bot, appkey, appsecret string) {
 	b.Commands().Add("twcreds", bot.Command{
 		Help:    "Test Twitter credentials",
 		Handler: creds,
-		Pub:     true,
+		Pub:     false,
 		Priv:    true,
-		Hidden:  false})
+		Hidden:  true})
 
 	b.Commands().Add("twlogin", bot.Command{
 		Help:    "Login to Twitter",
 		Handler: login,
-		Pub:     true,
+		Pub:     false,
 		Priv:    true,
-		Hidden:  false})
+		Hidden:  true})
 
 	b.Commands().Add("twpin", bot.Command{
 		Help:    "Enter the PIN code to finalize login",
 		Handler: pin,
-		Pub:     true,
+		Pub:     false,
 		Priv:    true,
-		Hidden:  false})
+		Hidden:  true})
 }
