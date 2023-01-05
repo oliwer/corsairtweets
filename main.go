@@ -16,6 +16,7 @@ import (
 	"github.com/StalkR/goircbot/plugins/up"
 	"github.com/StalkR/goircbot/plugins/urban"
 	"github.com/StalkR/goircbot/plugins/weather"
+	"github.com/oliwer/corsairtweets/lastseen"
 	"github.com/oliwer/corsairtweets/twitter"
 )
 
@@ -38,6 +39,7 @@ func main() {
 	geo.Register(b)
 	idle.Register(b, ignored)
 	imdb.Register(b)
+	lastseen.Register(b, ignored)
 	sed.Register(b)
 	twitter.Register(b, appkey, appsecret)
 	up.Register(b)
