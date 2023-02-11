@@ -19,6 +19,7 @@ import (
 	"github.com/StalkR/goircbot/plugins/urban"
 	"github.com/StalkR/goircbot/plugins/weather"
 	"github.com/oliwer/corsairtweets/lastseen"
+	"github.com/oliwer/corsairtweets/timein"
 	"github.com/oliwer/corsairtweets/twitter"
 )
 
@@ -38,6 +39,8 @@ func main() {
 	flag.Parse()
 
 	var wg sync.WaitGroup
+	wg.Add(1)
+	wg.Done() // it not allowed to call wg.Wait() before it has been used.
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT)
 	go func() {
@@ -51,6 +54,7 @@ func main() {
 	imdb.Register(b)
 	lastseen.Register(b, ignored, &wg)
 	sed.Register(b)
+	timein.Register(b)
 	twitter.Register(b, appkey, appsecret)
 	up.Register(b)
 	urban.Register(b)

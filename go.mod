@@ -7,6 +7,7 @@ require (
 	github.com/StalkR/goircbot v1.0.4-0.20221205100658-c9a78547b03e
 	github.com/fluffle/goirc v1.3.0
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17
+	github.com/tkuchiki/go-timezone v0.2.2
 )
 
 require (
