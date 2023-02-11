@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/StalkR/goircbot/bot"
-	"github.com/StalkR/goircbot/plugins/idle"
 	"github.com/StalkR/goircbot/plugins/imdb"
 	"github.com/StalkR/goircbot/plugins/sed"
 	"github.com/StalkR/goircbot/plugins/up"
@@ -27,7 +26,7 @@ var (
 	channel   = flag.String("channel", "#Corsair", "Channel to join")
 	appkey    = os.Getenv("TWITTER_APP_KEY")
 	appsecret = os.Getenv("TWITTER_APP_SECRET")
-	ignored   = strings.Split(os.Getenv("IDLE_IGNORE"), ",")
+	ignored   = strings.Split(os.Getenv("IGNORE_NICKS"), ",")
 	owmkey    = os.Getenv("OPENWEATHERMAP_KEY")
 )
 
@@ -35,7 +34,6 @@ func main() {
 	flag.Parse()
 
 	b := bot.NewBot(*host, *ssl, *nick, *ident, []string{*channel})
-	idle.Register(b, ignored)
 	imdb.Register(b)
 	lastseen.Register(b, ignored)
 	sed.Register(b)
