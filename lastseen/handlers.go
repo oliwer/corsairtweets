@@ -60,8 +60,6 @@ func (cc *channelsCache) getChannel(name string) channelStat {
 }
 
 func (cc *channelsCache) dump(name string) {
-	cc.Lock()
-	defer cc.Unlock()
 	filename := fmt.Sprintf("lastseen_%s.json", strings.TrimPrefix(name, "#"))
 	fh, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0640)
 	if err != nil {
