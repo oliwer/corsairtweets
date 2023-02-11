@@ -5,8 +5,12 @@ package main
 
 import (
 	"flag"
+	"log"
 	"os"
+	"os/signal"
 	"strings"
+	"sync"
+	"syscall"
 
 	"github.com/StalkR/goircbot/bot"
 	"github.com/StalkR/goircbot/plugins/imdb"
@@ -33,9 +37,19 @@ var (
 func main() {
 	flag.Parse()
 
+	var wg sync.WaitGroup
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT)
+	go func() {
+		sig := <-c
+		log.Printf("Received signal %s. Exiting...\n", sig.String())
+		wg.Wait()
+		os.Exit(1)
+	}()
+
 	b := bot.NewBot(*host, *ssl, *nick, *ident, []string{*channel})
 	imdb.Register(b)
-	lastseen.Register(b, ignored)
+	lastseen.Register(b, ignored, &wg)
 	sed.Register(b)
 	twitter.Register(b, appkey, appsecret)
 	up.Register(b)
