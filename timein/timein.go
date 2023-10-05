@@ -70,7 +70,7 @@ func timeIn(e *bot.Event) {
 		return
 	}
 
-	e.Bot.Privmsg(e.Target, fmt.Sprintf("Its is now %s in timezone %s",
+	e.Bot.Privmsg(e.Target, fmt.Sprintf("It is now %s in timezone %s",
 		time.Now().In(loc).Format(timeFormat), tz))
 }
 
