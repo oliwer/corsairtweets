@@ -14,6 +14,7 @@ import (
 
 	"github.com/StalkR/goircbot/bot"
 	"github.com/StalkR/goircbot/plugins/imdb"
+	"github.com/StalkR/goircbot/plugins/invite"
 	"github.com/StalkR/goircbot/plugins/sed"
 	"github.com/StalkR/goircbot/plugins/up"
 	"github.com/StalkR/goircbot/plugins/urban"
@@ -49,6 +50,7 @@ func main() {
 
 	b := bot.NewBot(*host, *ssl, *nick, *ident, strings.Split(*channels, ","))
 	imdb.Register(b)
+	invite.Register(b)
 	lastseen.Register(b, ignored, &wg)
 	sed.Register(b)
 	timein.Register(b)
