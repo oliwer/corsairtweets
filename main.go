@@ -20,19 +20,16 @@ import (
 	"github.com/StalkR/goircbot/plugins/weather"
 	"github.com/oliwer/corsairtweets/lastseen"
 	"github.com/oliwer/corsairtweets/timein"
-	"github.com/oliwer/corsairtweets/twitter"
 )
 
 var (
-	host      = flag.String("host", "irc.oftc.net", "Server host[:port]")
-	ssl       = flag.Bool("ssl", true, "Connect with SSL")
-	nick      = flag.String("nick", "twittard", "Bot nick")
-	ident     = flag.String("ident", "corsairtwitterebot", "Bot ident")
-	channels  = flag.String("channels", "#Corsair", "Channels to join, comma-separated")
-	appkey    = os.Getenv("TWITTER_APP_KEY")
-	appsecret = os.Getenv("TWITTER_APP_SECRET")
-	ignored   = strings.Split(os.Getenv("IGNORE_NICKS"), ",")
-	owmkey    = os.Getenv("OPENWEATHERMAP_KEY")
+	host     = flag.String("host", "irc.oftc.net", "Server host[:port]")
+	ssl      = flag.Bool("ssl", true, "Connect with SSL")
+	nick     = flag.String("nick", "twittard", "Bot nick")
+	ident    = flag.String("ident", "corsairtwitterebot", "Bot ident")
+	channels = flag.String("channels", "#Corsair", "Channels to join, comma-separated")
+	ignored  = strings.Split(os.Getenv("IGNORE_NICKS"), ",")
+	owmkey   = os.Getenv("OPENWEATHERMAP_KEY")
 )
 
 func main() {
@@ -55,7 +52,6 @@ func main() {
 	lastseen.Register(b, ignored, &wg)
 	sed.Register(b)
 	timein.Register(b)
-	twitter.Register(b, appkey, appsecret)
 	up.Register(b)
 	urban.Register(b)
 	weather.Register(b, owmkey)
