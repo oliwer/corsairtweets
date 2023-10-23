@@ -28,7 +28,7 @@ var (
 	ssl       = flag.Bool("ssl", true, "Connect with SSL")
 	nick      = flag.String("nick", "twittard", "Bot nick")
 	ident     = flag.String("ident", "corsairtwitterebot", "Bot ident")
-	channel   = flag.String("channel", "#Corsair", "Channel to join")
+	channels  = flag.String("channels", "#Corsair", "Channels to join, comma-separated")
 	appkey    = os.Getenv("TWITTER_APP_KEY")
 	appsecret = os.Getenv("TWITTER_APP_SECRET")
 	ignored   = strings.Split(os.Getenv("IGNORE_NICKS"), ",")
@@ -50,7 +50,7 @@ func main() {
 		os.Exit(1)
 	}()
 
-	b := bot.NewBot(*host, *ssl, *nick, *ident, []string{*channel})
+	b := bot.NewBot(*host, *ssl, *nick, *ident, strings.Split(*channels, ","))
 	imdb.Register(b)
 	lastseen.Register(b, ignored, &wg)
 	sed.Register(b)
