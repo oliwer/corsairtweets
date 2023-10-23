@@ -13,6 +13,7 @@ import (
 	"syscall"
 
 	"github.com/StalkR/goircbot/bot"
+	"github.com/StalkR/goircbot/plugins/golang"
 	"github.com/StalkR/goircbot/plugins/imdb"
 	"github.com/StalkR/goircbot/plugins/invite"
 	"github.com/StalkR/goircbot/plugins/sed"
@@ -49,6 +50,7 @@ func main() {
 	}()
 
 	b := bot.NewBot(*host, *ssl, *nick, *ident, strings.Split(*channels, ","))
+	golang.Register(b)
 	imdb.Register(b)
 	invite.Register(b)
 	lastseen.Register(b, ignored, &wg)
